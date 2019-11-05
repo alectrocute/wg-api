@@ -13,7 +13,7 @@ Use a fresh Ubuntu 18.* install with up-to-date apt dependencies, with Node and 
 apt-get install nodejs npm -y
 git clone https://github.com/alectrocute/wg-api
 cd wg-api
-npm install
+npm install fastify fastify-static chalk ini
 cd ./scripts/bash
 ./installer.sh
 ```
