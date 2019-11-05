@@ -1,0 +1,5 @@
+.available_ip
+.saved
+.wg0.conf
+users/
+wg.def
