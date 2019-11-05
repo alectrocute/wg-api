@@ -4,7 +4,7 @@ wg-api is an API endpoint for a Wireguard® VPN server. It allows you to make HT
 
 It also currently includes an installer script to configure your Wireguard® interface correctly as per wg-api's construction.
 
-It's still a baby project but I plan on building it out into a full-featured RESTful API for this amazing VPN software.
+It's still a baby project but I plan on building it out into a full-featured RESTful API for this amazing VPN software. I would **NOT** use this in production for awhile. It is a very insecure endpoint that could and most likely **will** give an attacker access to your user's keys and full control over your system.
 
 ## Installation
 
