@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/alectrocute/wg-api/master/readme-icon.png)
+![logo](https://github.com/alectrocute/wg-api/blob/master/icon.png)
 
 wg-api is an API endpoint for a Wireguard® VPN server. It allows you to make HTTP GET requests with JSON responses, enabling you to create & revoke peers (eg. clients), access QR/plaintext/JSON config files and receive realtime server info.
 
