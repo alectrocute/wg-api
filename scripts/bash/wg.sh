@@ -2,12 +2,12 @@
 
 cd `dirname ${BASH_SOURCE[0]}`
 
-. wg.def
-CLIENT_TPL_FILE=client.conf.tpl
-SERVER_TPL_FILE=server.conf.tpl
-SAVED_FILE=.saved
-AVAILABLE_IP_FILE=.available_ip
-WG_TMP_CONF_FILE=.$_INTERFACE.conf
+. ../data/wg.def
+CLIENT_TPL_FILE=../data/client.conf.tpl
+SERVER_TPL_FILE=../data/server.conf.tpl
+SAVED_FILE=../data/tmp/saved.tmp
+AVAILABLE_IP_FILE=../data/tmp/available_ip.tmp
+WG_TMP_CONF_FILE=../data/tmp/$_INTERFACE.conf.tmp
 WG_CONF_FILE="/etc/wireguard/$_INTERFACE.conf"
 
 dec2ip() {
@@ -68,7 +68,7 @@ add_user() {
     _PRIVATE_KEY=`cat $userdir/privatekey`
     _VPN_IP=$(get_vpn_ip)
     if [[ -z $_VPN_IP ]]; then
-        echo "no available ip"
+        echo -e "\e[44m[wg-api cli]\e[0m No available IP"
         exit 1
     fi
     _TABLE=auto
@@ -91,7 +91,7 @@ add_user() {
         exit 1
     fi
 
-    echo "$user $_VPN_IP $public_key" >> ${SAVED_FILE} && echo "use $user is added. config dir is $userdir"
+    echo -e "\e[44m[wg-api cli]\e[0m Created $user"
 }
 
 del_user() {
@@ -112,7 +112,7 @@ del_user() {
     if [[ -n "$ip" ]]; then
         echo "$ip" >> ${AVAILABLE_IP_FILE}
     fi
-    rm -rf $userdir && echo "use $user is deleted"
+    rm -rf $userdir && echo -e "\e[44m[wg-api cli]\e[0m Revoked $user"
 }
 
 generate_and_install_server_config_file() {
@@ -191,7 +191,7 @@ usage() {
 
 # main
 if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root"
+   echo -e "\e[44m[wg-api cli]\e[0m This script needs to be run as root"
     exit 1
 fi
 

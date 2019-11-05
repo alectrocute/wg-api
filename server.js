@@ -1,17 +1,19 @@
-// wg-api config json
 const config = require('./config.json')
-
 var fs = require('fs')
 var ini = require('ini')
+const chalk = require('chalk')
 const path = require('path')
 const exec = require('child_process').exec
-const fastify = require('fastify')({
-    logger: false
-})
+const fastify = require('fastify')({ logger: false })
+fastify.register(require('fastify-static'), { root: path.join(__dirname) })
 
-fastify.register(require('fastify-static'), {
-    root: path.join(__dirname),
-})
+function cliMsg(msg, type) {
+    if (type !== 1) {
+        console.log(chalk.black.bgWhite("wg-api") + " " + msg)
+    } else {
+        console.log(chalk.black.bgWhite("wg-api") + " " + chalk.white.bgRed.bold(msg))
+    }
+}
 
 function formatBytes(a, b) {
     if (0 == a) return "0 Bytes";
@@ -32,13 +34,13 @@ function formatTime(unixtimestamp) {
         date.getFullYear() + ' ' +
         date.getHours() + ':' +
         min.substr(-2) +
-        ':' + sec.substr(-2) + " UTC";
+        ':' + sec.substr(-2) + " UTC"
     return resp;
 }
 
 function genError(code, msg) {
     var res = { code: code, msg: msg }
-    return JSON.stringify(res, null, 2);
+    return JSON.stringify(res, null, 2)
 }
 
 function authReq(req, reply, b) {
@@ -58,16 +60,18 @@ function authReq(req, reply, b) {
 
 function authAction(req) {
     if (config.allowedHosts.includes(req.ip)) {
-        return true;
+        return true
     }
     if (config.allowedHosts.includes("*")) {
-        return true;
+        return true
     }
-    return false;
+    cliMsg(`${req.ip} denied access, please note this activity.`)
+    return false
 }
 
-fastify.get('/info', function(req, reply) {
-    exec('bash ./scripts/json.sh', (err, stdout, stderr) => {
+fastify.get('/interface/info', function(req, reply) {
+    cliMsg(`${req.ip} requested server overview`)
+    exec('bash ./scripts/bash/json.sh', (err, stdout, stderr) => {
         var temp = {}
         temp.output = JSON.parse(stdout)
         for (var inf in temp.output) {
@@ -82,10 +86,11 @@ fastify.get('/info', function(req, reply) {
     })
 })
 
-fastify.get('/client/info/:username', function(request, reply) {
-    if (!authAction(request)) return;
+fastify.get('/peer/info/:username', function(request, reply) {
+    cliMsg(`${request.ip} requested info of peer ${request.params.username}`)
+    if (!authAction(request)) return
     try {
-        var profile = ini.parse(fs.readFileSync('./profiles/' + request.params.username + '/client.conf', 'utf-8'))
+        var profile = ini.parse(fs.readFileSync('./profiles/' + request.params.username + '/wg0.conf', 'utf-8'))
         profile.qr = "/client/qr/" + request.params.username + ".png"
         reply.send(JSON.stringify({ code: 200, profile }, null, 2))
     } catch (error) {
@@ -93,8 +98,9 @@ fastify.get('/client/info/:username', function(request, reply) {
     }
 })
 
-fastify.get('/client/create/:username', function(request, reply) {
-    if (!authAction(request)) return;
+fastify.get('/peer/create/:username', function(request, reply) {
+    cliMsg(`${request.ip} requested new peer named ${request.params.username}`)
+    if (!authAction(request)) return
     try {
         var profile = ini.parse(fs.readFileSync('./profiles/' + request.params.username + '/wg0.conf', 'utf-8'))
         profile.qr = "/client/qr/" + request.params.username + ".png"
@@ -109,17 +115,16 @@ fastify.get('/client/create/:username', function(request, reply) {
 })
 
 fastify.get('/client/remove/:username', function(request, reply) {
-    if (!authAction(request)) return;
+    cliMsg(`${request.ip} requested removal of peer ${request.params.username}`)
+    if (!authAction(request)) return
     exec(`bash ./scripts/bash/wg.sh -d ${request.params.username}`, (err, stdout, stderr) => {
         reply.send(JSON.stringify({ code: 200, profile: "Revoked" }, null, 2))
     });
-
-
-
 })
 
-fastify.get('/client/qr/:username', function(request, reply) {
-    if (!authAction(request)) return;
+fastify.get('/peer/qr/:username', function(request, reply) {
+    cliMsg(`${request.ip} requested QR .png of peer ${request.params.username}`)
+    if (!authAction(request)) return
     try {
         reply.sendFile(path.join("profiles", request.params.username, request.params.username + ".png"))
     } catch (error) {
@@ -127,8 +132,9 @@ fastify.get('/client/qr/:username', function(request, reply) {
     }
 })
 
-fastify.get('/client/plaintext/:username', function(request, reply) {
-    if (!authAction(request)) return;
+fastify.get('/peer/plaintext/:username', function(request, reply) {
+    cliMsg(`${request.ip} requested plaintext cert of peer ${request.params.username}`)
+    if (!authAction(request)) return
     try {
         reply.sendFile(path.join("profiles", request.params.username, "wg0.conf"))
     } catch (error) {
@@ -136,8 +142,8 @@ fastify.get('/client/plaintext/:username', function(request, reply) {
     }
 })
 
-
 fastify.listen(config.listen.port, config.listen.host, err => {
     if (err) throw err
-    console.log(`wg-api listening on ${config.listen.host}:${fastify.server.address().port}`)
+    cliMsg(`Now listening on ${config.listen.host}:${fastify.server.address().port}`)
+    cliMsg(`This endpoint is very insecure! Make sure you reverse-proxy it and properly configure allowed hosts.`, 1)
 })

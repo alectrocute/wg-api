@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# https://github.com/l-n-s/wireguard-install
-#
-# Copyright (c) 2018 Viktor Villainov. Released under the MIT License.
 
 WG_CONFIG="/etc/wireguard/wg0.conf"
 
