@@ -137,7 +137,7 @@ DNS = 1.1.1.1, 1.0.0.1
 [Peer]
 PublicKey = dutH7c8K2VX4OcQ1c/rvIAAFJBRcf2a9ieVmq2GI4UA=
 AllowedIPs = 0.0.0.0/0, ::/0
-Endpoint = 45.76.174.177:27953
+Endpoint = 12.34.56.343:27953
 PersistentKeepalive = 25
 ```
 
