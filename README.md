@@ -35,7 +35,7 @@ node server.js
 
 ## API endpoints
 
-### /interface/info
+### GET /interface/info
 
 Will return a JSON object of all Wireguard® interface stats:
 
@@ -60,7 +60,7 @@ Will return a JSON object of all Wireguard® interface stats:
 }
 ```
 
-### /peer/create/[nickname]
+### GET /peer/create/[nickname]
 
 Will generate a new peer, assign IP, etc. based on customized template and return JSON of their details:
 
@@ -84,7 +84,7 @@ Will generate a new peer, assign IP, etc. based on customized template and retur
 }
 ```
 
-### /peer/remove/[nickname]
+### GET /peer/remove/[nickname]
 
 Will revoke a peer, remove all associated files, reload the interface and return a basic message:
 
@@ -95,12 +95,12 @@ Will revoke a peer, remove all associated files, reload the interface and return
 }
 ```
 
-### /peer/qr/[nickname]
+### GET /peer/qr/[nickname]
 
 Will return a PNG image of a Wireguard® peer's QR code.
 
 
-### /peer/info/[nickname]
+### GET /peer/info/[nickname]
 
 Will return a JSON object of a Wireguard® peer's stats:
 
@@ -124,7 +124,7 @@ Will return a JSON object of a Wireguard® peer's stats:
 }
 ```
 
-### /peer/plaintext/[nickname]
+### GET /peer/plaintext/[nickname]
 
 Will return a INI-formatted plaintext document of a Wireguard® peer's configuration file:
 
