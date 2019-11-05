@@ -79,7 +79,7 @@ Will generate a new peer, assign IP, etc. based on customized template and retur
       "Endpoint": "45.76.174.177:27953",
       "PersistentKeepalive": "25"
     },
-    "qr": "/client/qr/alec2"
+    "qr": "/peer/qr/alec2"
   }
 }
 ```
@@ -119,7 +119,7 @@ Will return a JSON object of a Wireguard® peer's stats:
       "Endpoint": "12.34.56.343:27953",
       "PersistentKeepalive": "25"
     },
-    "qr": "/client/qr/alec"
+    "qr": "/peer/qr/alec"
   }
 }
 ```
