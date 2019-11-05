@@ -8,7 +8,7 @@ It's still a baby project but I plan on building it out into a full-featured RES
 
 ## Installation
 
-Use a fresh Ubuntu 18.* install with up-to-date apt dependencies, with Node and NPM installed and Wireguard uninstalled and not running.
+Use a fresh Ubuntu 18.* install with up-to-date apt dependencies, with Node and NPM installed and Wireguard uninstalled.
 ```bash
 apt-get install nodejs npm -y
 git clone https://github.com/alectrocute/wg-api
