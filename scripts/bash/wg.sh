@@ -89,6 +89,10 @@ add_user() {
         echo "wg set failed"
         rm -rf $user
         exit 1
+    else
+    cat >> $SAVED_FILE <<EOF
+$user $ip $public_key
+EOF
     fi
 
     echo -e "\e[44m[wg-api cli]\e[0m Created $user"
